@@ -8,6 +8,8 @@ install:
    - sudo cmake .
    - sudo make
    - sudo mv libgtest* /usr/lib/
+   - cd "${TRAVIS_BUILD_DIR}"
+   # -- workaround end
 
 script:
     - mkdir _builds
