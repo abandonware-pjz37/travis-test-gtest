@@ -1,4 +1,1 @@
-travis-test-gtest
-=================
-
-travis-ci.org test gtest library link with cmake
+There is no library by default: [![Build Status](https://travis-ci.org/travis-ci-tester/travis-test-gtest.png?branch=master)](https://travis-ci.org/travis-ci-tester/travis-test-gtest)
