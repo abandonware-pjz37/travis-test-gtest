@@ -5,4 +5,8 @@ install:
    - sudo apt-get install libgtest-dev
 
 script:
-    - echo "hello"
+    - mkdir _builds
+    - cd _builds
+    - cmake ..
+    - make
+    - ctest
