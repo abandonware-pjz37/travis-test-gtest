@@ -1,8 +1,8 @@
 language:
-   - cpp
+   - objective-c
 
 install:
-   - sudo apt-get install libgtest-dev
+   - brew install cmake
 
 script:
     - mkdir _builds
