@@ -2,7 +2,12 @@ language:
    - cpp
 
 install:
+   # gtest install workaround
    - sudo apt-get install libgtest-dev
+   - cd /usr/src/gtest
+   - sudo cmake .
+   - sudo make
+   - sudo mv libgtest* /usr/lib/
 
 script:
     - mkdir _builds
