@@ -25,3 +25,4 @@ script:
     - cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${GTEST_DIR}/cmake/iOS.cmake -DCMAKE_INSTALL_PREFIX=${GTEST_ROOT} ..
     - xcodebuild -target install
     - ls -la ${GTEST_ROOT}
+    - file ${GTEST_ROOT}/libgtest.a
