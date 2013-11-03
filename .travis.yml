@@ -6,6 +6,7 @@ before_install:
 
 install:
     - brew install cmake
+    - brew install python3
     - wget https://github.com/ruslo/sugar/archive/v1.0.0.tar.gz
     - tar -xvf v1.0.0.tar.gz
     - export SUGAR_ROOT=`pwd`/sugar-1.0.0
