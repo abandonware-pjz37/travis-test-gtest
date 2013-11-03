@@ -1,20 +1,26 @@
 language:
-   - objective-c
+    - objective-c
 
 before_install:
-   - brew update
+    - brew update
 
 install:
-   - brew install cmake
-   - wget https://github.com/ruslo/sugar/archive/v1.0.0.tar.gz
-   - tar -xvf v1.0.0.tar.gz
-   - export SUGAR_ROOT=`pwd`/sugar-1.0.0
+    - brew install cmake
+    - wget https://github.com/ruslo/sugar/archive/v1.0.0.tar.gz
+    - tar -xvf v1.0.0.tar.gz
+    - export SUGAR_ROOT=`pwd`/sugar-1.0.0
+
+before_script:
+    - mkdir ios.gtest.install
+    - export GTEST_ROOT=`pwd`/ios.gtest.install
 
 script:
-    - git clone https://github.com/ruslo/gtest gtest
-    - cd gtest
+    - wget https://github.com/ruslo/gtest/archive/v1.7.0-sugar.tar.gz
+    - tar -xvf v1.7.0-sugar.tar.gz
+    - GTEST_DIR=`pwd`/gtest-1.7.0-sugar
+    - cd ${GTEST_DIR}
     - mkdir _builds
     - cd _builds
-    - cmake -G Xcode -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_INSTALL_PREFIX=${HOME}/ios.install ..
+    - cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${GTEST_DIR}/cmake/iOS.cmake -DCMAKE_INSTALL_PREFIX=${GTEST_ROOT} ..
     - xcodebuild -target install
-    - ls -la ${HOME}/ios.install
+    - ls -la ${GTEST_ROOT}
