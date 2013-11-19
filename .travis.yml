@@ -7,22 +7,24 @@ before_install:
 install:
     - brew install cmake
     - brew install python3
-    - wget https://github.com/ruslo/sugar/archive/v1.0.0.tar.gz
-    - tar -xvf v1.0.0.tar.gz
-    - export SUGAR_ROOT=`pwd`/sugar-1.0.0
-
-before_script:
-    - mkdir ios.gtest.install
-    - export GTEST_ROOT=`pwd`/ios.gtest.install
 
 script:
-    - wget https://github.com/ruslo/gtest/archive/v1.7.0-sugar.tar.gz
-    - tar -xvf v1.7.0-sugar.tar.gz
-    - GTEST_DIR=`pwd`/gtest-1.7.0-sugar
+    # 1. Download gtest library
+    - wget https://github.com/hunter-packages/gtest/archive/v1.7.0-hunter.tar.gz
+    - tar -xf v1.7.0-hunter.tar.gz
+    - export GTEST_DIR=`pwd`/gtest-1.7.0-hunter
+    # 2. Build/install gtest (native platform)
     - cd ${GTEST_DIR}
-    - mkdir _builds
-    - cd _builds
-    - cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=${GTEST_DIR}/cmake/iOS.cmake -DCMAKE_INSTALL_PREFIX=${GTEST_ROOT} ..
+    - mkdir -p _builds/make
+    - cd _builds/make
+    - cmake -DCMAKE_INSTALL_PREFIX=${GTEST_DIR}/Install/make ../..
+    - make install
+    # 3. Build universal(iphone + simulator) iOS library
+    - cd ${GTEST_DIR}
+    - mkdir -p _builds/xcode
+    - cd _builds/xcode
+    - cmake -GXcode -DCMAKE_TOOLCHAIN_FILE=${GTEST_DIR}/cmake/iOS.cmake -DCMAKE_INSTALL_PREFIX=${GTEST_DIR}/Install/ios ../..
     - xcodebuild -target install
-    - ls -la ${GTEST_ROOT}
-    - file ${GTEST_ROOT}/libgtest.a
+    # 4. Check installed iOS libraries
+    - ls ${GTEST_DIR}/Install/ios/*.a
+    - file ${GTEST_DIR}/Install/ios/libgtest.a
