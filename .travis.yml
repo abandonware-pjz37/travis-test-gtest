@@ -10,9 +10,9 @@ install:
 
 script:
     # 1. Download gtest library
-    - wget https://github.com/hunter-packages/gtest/archive/v1.7.0-hunter.tar.gz
-    - tar -xf v1.7.0-hunter.tar.gz
-    - export GTEST_DIR=`pwd`/gtest-1.7.0-hunter
+    - wget https://github.com/hunter-packages/gtest/archive/v1.7.0-hunter-1.tar.gz
+    - tar -xf v1.7.0-hunter-1.tar.gz
+    - export GTEST_DIR=`pwd`/gtest-1.7.0-hunter-1
     # 2. Build/install gtest (native platform)
     - cd ${GTEST_DIR}
     - mkdir -p _builds/make
