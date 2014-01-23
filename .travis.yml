@@ -1,30 +1,28 @@
 language:
     - objective-c
 
-before_install:
-    - brew update
-
 install:
-    - brew install cmake
-    - brew install python3
+    - wget https://github.com/ruslo/CMake/archive/ios.universal.tar.gz
+    - openssl sha1 ios.universal.tar.gz
+    - tar xf ios.universal.tar.gz
+    - cmake -HCMake-ios.universal -B_builds/cmake -DCMAKE_USE_SYSTEM_CURL=YES -DCMAKE_BUILD_TYPE=Release
+    - cmake --build _builds/cmake --target install
 
 script:
     # 1. Download gtest library
-    - wget https://github.com/hunter-packages/gtest/archive/v1.7.0-hunter-2.tar.gz
-    - tar -xf v1.7.0-hunter-2.tar.gz
-    - export GTEST_DIR=`pwd`/gtest-1.7.0-hunter-2
-    # 2. Build/install gtest (native platform)
-    - cd ${GTEST_DIR}
-    - mkdir -p _builds/make
-    - cd _builds/make
-    - cmake -DCMAKE_INSTALL_PREFIX=${GTEST_DIR}/Install/make ../..
-    - make install
-    # 3. Build universal(iphone + simulator) iOS library
-    - cd ${GTEST_DIR}
-    - mkdir -p _builds/xcode
-    - cd _builds/xcode
-    - cmake -GXcode -DCMAKE_TOOLCHAIN_FILE=${GTEST_DIR}/cmake/iOS.cmake -DCMAKE_INSTALL_PREFIX=${GTEST_DIR}/Install/ios ../..
-    - xcodebuild -target install
-    # 4. Check installed iOS libraries
-    - ls ${GTEST_DIR}/Install/ios/*.a
-    - lipo -info ${GTEST_DIR}/Install/ios/libgtest.a
+    - wget https://github.com/hunter-packages/gtest/archive/v1.7.0-hunter-4.tar.gz
+    - tar -xf v1.7.0-hunter-4.tar.gz
+    - cd gtest-1.7.0-hunter-4
+
+    # 2. Build/install gtest (native platform, if needed):
+    - cmake -H. -B_builds/make -DCMAKE_INSTALL_PREFIX="`pwd`/_install/make"
+    - cmake --build _builds/make --target install
+
+    # 3. Build universal(iphone + simulator) iOS library (Xcode only):
+    - cmake -H. -B_builds/ios -GXcode -DCMAKE_INSTALL_PREFIX="`pwd`/_install/ios" -DCMAKE_TOOLCHAIN_FILE="`pwd`/cmake/iOS.cmake"
+    - cmake --build _builds/ios --target install --config Debug
+    - cmake --build _builds/ios --target install --config Release
+
+    # 4. Check installed iOS libraries (debug + release):
+    - ls _install/ios/lib/*.a
+    - lipo -info "`find _install/ios -name libgtest.a`"
